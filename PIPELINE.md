@@ -1,0 +1,50 @@
+# ルナ 毎週パイプライン(スケジュール実行用の手順書)
+
+TikTok @ai_loto_luna(Metricool ブランド 6989756)。抽せんは月曜・木曜の18:45。
+実行は毎週 火曜・金曜 07:07(JST)。投稿は同じ日の 10:00(JST)に予約する。
+1本の動画 = 前半「答え合わせ」(オフ・カーディガン・ギャル口調) + 後半「次の予想」(オン・白ジャケット・フォーマル)。
+
+## 守ること(破らない)
+- 当せん確率が上がる、とは絶対に言わない。「当たったときの取り分」と「ルナ vs ランダムの公開検証」だけ。
+- 結果を確認できない/2か所で食い違う/動画が失敗したときは、投稿せずに止めて、ユーザーに通知(PushNotification があれば使い、最終メッセージにも書く)。間違った結果の動画を出すより止める。
+- すでに同じ回の投稿が予約・公開されている場合は、何もしない(二重投稿禁止)。
+- 公開前にユーザーが確認できない前提。迷ったら止める。
+
+## 手順
+0. リポジトリ kijimatoon3-ai/luna-assets が無ければ add_repo(access=push)→ git clone。作業はリポジトリのルート。
+1. 直前に終わった回 D を決める。data/loto6_all.xlsx の最終行の次、または最新の抽せん日(月・木)。次の回 N = D+1。
+   N の抽せん日: D が月曜の回なら木曜、D が木曜の回なら月曜。
+2. 重複チェック: data/picks/<N>.json が既にあり、かつ Metricool(getScheduledPosts, brandId 6989756, Asia/Tokyo)に今日10:00以降の TikTok 予約がある → 終了(何もしない)。
+3. 結果の取得: WebFetch で次を順に試す(抽せん翌朝は更新済みのはず)。本数字6個とボーナスは**2か所以上で一致**を確認。
+   - https://tokaikensyo.com/campaignwinning/loto6/
+   - https://www.mk-mode.com/rails/loto/loto6
+   - https://loto-life.net/csv/download(最新回数の確認用)
+   - https://takarakuji-loto.jp/tousenp.html
+   - みずほ銀行のページは JS 描画で空になるので使わない。
+   口数(1〜5等)と賞金は表がある1か所から取る。取れない場合は止める。
+4. data/result.json を作る:
+   {"draw":D,"date":"YYYY-MM-DD","nums":[6個昇順],"bonus":b,"counts":[1〜5等口数],"prizes":[1〜5等賞金],"carry":キャリーオーバー}
+5. python3 scripts/weekly.py --result data/result.json --next N --next-date "M/D 曜"
+   → cards/answer_<D>.png、cards/pred_<N>.png、data/picks/<N>.json、data/scoreboard.json、data/week_summary.json ができる。
+6. git add -A; git commit; git push(カードを raw.githubusercontent.com で公開するため)。
+   カードURL: https://raw.githubusercontent.com/kijimatoon3-ai/luna-assets/main/cards/<ファイル名>
+7. 動画を HeyGen create_video_from_studio で作る(aspectRatio "9:16"、全シーン voice_id 9U1EOQDnE3aBBuViHEYj、voice_settings.speed 1.1)。
+   台本は data/week_summary.json の数値で作る。ギャル部分は砕けた口調、予想部分はフォーマル。「昨日の第D回」と言う(実行は抽せんの翌朝)。
+   - シーン1 avatar_video(オフ): avatar_id a194463ace6340de863dc0ece760ff61、「やっほー、ルナだよ。昨日の第D回の結果、見た?」+ルナの結果への一言(外れ/当たり/ランダムに勝った/負けた)。
+   - シーン2 image: cards/answer_<D>.png に、ナレーション(当せん番号、ルナ一致○個、ランダム一致○個、勝敗、通算)。
+   - シーン3 avatar_video(オン): avatar_id f25ca49937d1451b870b6dcc4408775b、「ここからは、第N回の予想です。ルナは、人気のない数字を選びます。」
+   - シーン4 image: cards/pred_<N>.png に、ナレーション(ルナの6数字、ランダムの6数字、「どっちが勝つか勝負です」)。
+   - シーン5 avatar_video(オン): 「当たる保証はありません。遊びとして見てください。ルナとランダム、どっちが勝つと思いますか。コメントで教えてください。」
+   全体 60〜80秒に収める。ナレーションは短く、数字は区切って読む(例「に、にじゅういち、…」ではなく「2、21、30、34、35、43」と書く)。
+   get_video で completed まで待つ(目安4分、30秒ごと)。失敗したら1回だけ作り直し、それでも失敗なら止めて通知。
+8. Metricool createScheduledPost(blogId 6989756): 今日 10:00 JST、providers tiktok、
+   tiktokData {isAigc:true, privacyOption:PUBLIC_TO_EVERYONE, title:"第N回ロト6 ルナの予想と答え合わせ"}、media は video_url。
+   キャプション: 【第D回 答え合わせ+第N回 AI予想】の見出し、ルナ/ランダムの一致数、「当たる保証なし・抽せんは毎回独立・エンタメ」、ハッシュタグ(#ロト6 #ロト6予想 #AI予想 #AIロト研究員ルナ #宝くじ)。
+   firstCommentText: 「ルナとランダム、どっちが多く当たると思う?コメントで教えて!」
+9. Projects ツールの claude/luna-method-v1.md の「戦績」を data/scoreboard.json の通算に更新する。
+10. 最後に、何を作って何時に予約したか、ルナ vs ランダムの通算を一行でまとめて報告。
+
+## 補足
+- 月の公開枠(Metricool、他ブランドと共有)は残りが少ない。週2本まで。増やさない(ユーザー決定)。
+- ルナの外見: 予想=白ジャケット(オン)、答え合わせ=カーディガン(オフ・ギャル)。固定。
+- 効果測定: 3〜4本たまったら Metricool で時間帯別の再生数・最後まで見られた割合を比べ、投稿時間を調整する(ユーザーと相談)。
