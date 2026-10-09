@@ -30,12 +30,17 @@ TikTok @ai_loto_luna(Metricool ブランド 6989756)。抽せんは月曜・木�
    {"draw":D,"date":"YYYY-MM-DD","nums":[6個昇順],"bonus":b,"counts":[1〜5等口数],"prizes":[1〜5等賞金],"carry":キャリーオーバー}
 5. python3 scripts/weekly.py --result data/result.json --next N --next-date "M/D 曜"
    → cards/answer_<D>.png、cards/pred_<N>.png、data/picks/<N>.json、data/scoreboard.json、data/week_summary.json ができる。
+5b. 整合性チェック(必須): python3 scripts/validate.py --draw D --next N。NG なら動画を作らず止めて通知。
+   通れば、data/history.json に「予想(数字・根拠)→結果→一致数→通算」が回ごとに1本でつながっている。
+   予想も結果も必ずここ(data/picks/<回>.json と data/week_summary.json)の数字だけを使う。台本に数字を手で書き写さない(コピーして使う)。
 6. git add -A; git commit; git push(カードを raw.githubusercontent.com で公開するため)。
    カードURL: https://raw.githubusercontent.com/kijimatoon3-ai/luna-assets/main/cards/<ファイル名>
 7. 動画を HeyGen create_video_from_studio で作る(aspectRatio "9:16"、全シーン voice_id 9U1EOQDnE3aBBuViHEYj、voice_settings.speed 1.1)。
    台本は data/week_summary.json の数値で作る。ギャル部分は砕けた口調、予想部分はフォーマル。「昨日の第D回」と言う(実行は抽せんの翌朝)。
    - シーン1 avatar_video(オフ): avatar_id a194463ace6340de863dc0ece760ff61、「やっほー、ルナだよ。昨日の第D回の結果、見た?」+ルナの結果への一言(外れ/当たり/ランダムに勝った/負けた)。
    - シーン2 image: cards/answer_<D>.png に、ナレーション(当せん番号、ルナ一致○個、ランダム一致○個、勝敗、通算)。
+   - 予想動画(B)は、ルナの6数字を「1つ目、20。2つ目、25。…」と1個ずつ紹介してから、最後に6数字をまとめて読む。ランダムは続けてまとめて読むだけでよい。
+   - 結果動画(A)には、予想の根拠と実際の結果の照合を一言入れる(例: 「人気薄を選んだけど、当たりは人気の数字に寄ってた」)。当たった場合も外れた場合も、「当選確率は上がらない」前提を崩さない。
    - シーン3 avatar_video(オン): avatar_id f25ca49937d1451b870b6dcc4408775b、「ここからは、第N回の予想です。ルナは、人気のない数字を選びます。」
    - シーン4 image: cards/pred_<N>.png に、ナレーション(ルナの6数字、ランダムの6数字、「どっちが勝つか勝負です」)。
    - シーン5 avatar_video(オン): 「当たる保証はありません。遊びとして見てください。ルナとランダム、どっちが勝つと思いますか。コメントで教えてください。」

@@ -20,6 +20,11 @@ ap.add_argument("--next", type=int, required=True)
 ap.add_argument("--next-date", default="")          # 例 "10/12(月)"
 a = ap.parse_args()
 R = json.load(open(a.result))
+if not a.next_date:   # 次回の抽せん日(月・木)を自動で出す
+    d0 = datetime.date.fromisoformat(R["date"]); n = d0 + datetime.timedelta(days=1)
+    while n.weekday() not in (0, 3): n += datetime.timedelta(days=1)
+    a.next_date = "%d/%d %s" % (n.month, n.day, "月火水木金土日"[n.weekday()])
+    print("next-date auto:", a.next_date)
 D, NEXT = R["draw"], a.next
 os.makedirs("data/picks", exist_ok=True); os.makedirs("cards", exist_ok=True)
 
@@ -110,4 +115,5 @@ json.dump({"answer_draw": D, "luna_hit": hit(pk["luna"]), "random_hit": hit(pk["
            "total": {"draws": n, "luna": tl, "random": tr}, "next": NEXT, "luna": nx["luna"], "random": nx["random"],
            "percentile": nx["percentile_luna"], "nums": R["nums"], "bonus": R["bonus"]},
           open("data/week_summary.json", "w"), ensure_ascii=False, indent=1)
+subprocess.run([sys.executable, "scripts/build_history.py"], check=True)
 print(open("data/week_summary.json").read())
