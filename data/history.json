@@ -93,6 +93,61 @@
    5,
    6
   ],
+  "result": {
+   "nums": [
+    4,
+    6,
+    8,
+    11,
+    24,
+    27
+   ],
+   "bonus": 36,
+   "luna_hit": 0,
+   "random_hit": 0,
+   "cum_luna": 0,
+   "cum_random": 2
+  }
+ },
+ {
+  "draw": 2146,
+  "analysis_through": 2145,
+  "oos_corr": 0.6902,
+  "luna": [
+   1,
+   22,
+   29,
+   31,
+   40,
+   43
+  ],
+  "random": [
+   3,
+   7,
+   22,
+   25,
+   29,
+   39
+  ],
+  "percentile_luna": 0.388,
+  "basis_unpopular": [
+   43,
+   40,
+   34,
+   41,
+   35,
+   20,
+   42
+  ],
+  "basis_popular": [
+   11,
+   8,
+   3,
+   7,
+   12,
+   5,
+   6
+  ],
   "result": null
  }
 ]

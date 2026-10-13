@@ -1,38 +1,38 @@
 {
- "answer_draw": 2144,
+ "answer_draw": 2145,
  "luna_hit": 0,
- "random_hit": 2,
- "verdict": "ランダムの勝ち",
+ "random_hit": 0,
+ "verdict": "引き分け",
  "total": {
-  "draws": 1,
+  "draws": 2,
   "luna": 0,
   "random": 2
  },
- "next": 2145,
+ "next": 2146,
  "luna": [
-  20,
-  25,
-  34,
-  35,
+  1,
+  22,
+  29,
+  31,
   40,
-  41
+  43
  ],
  "random": [
-  5,
-  14,
-  21,
+  3,
+  7,
+  22,
   25,
   29,
-  38
+  39
  ],
- "percentile": 0.08406526154384171,
+ "percentile": 0.3876843817734047,
  "nums": [
-  5,
+  4,
   6,
+  8,
   11,
-  25,
-  31,
-  32
+  24,
+  27
  ],
- "bonus": 15
+ "bonus": 36
 }
