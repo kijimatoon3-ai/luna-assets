@@ -91,7 +91,7 @@ for y in range(H):
     t = y/H; d.line([(0, y), (W, y)], fill=tuple(int(BGT[i]+(BGB[i]-BGT[i])*t) for i in range(3)))
 m = 60
 title = "第%d回%sの予想" % (NEXT, (" %s" % a.next_date) if a.next_date else "")
-ct(d, 170, title, F("Bold", 60), WHITE); ct(d, 252, "ルナ「逆張り」 vs ランダム", F("Medium", 36), BLUE)
+ct(d, 170, title, F("Bold", 60), WHITE); ct(d, 252, "ルナ式ロジックの予想(比較用にランダムも)", F("Medium", 36), BLUE)
 def balls(nums, y, fill, tc):
     for i, v in enumerate(nums):
         cx = m+36+70+i*((W-2*m-72-140)/5); r = 62
