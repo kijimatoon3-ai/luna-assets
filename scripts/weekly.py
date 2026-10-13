@@ -115,5 +115,6 @@ json.dump({"answer_draw": D, "luna_hit": hit(pk["luna"]), "random_hit": hit(pk["
            "total": {"draws": n, "luna": tl, "random": tr}, "next": NEXT, "luna": nx["luna"], "random": nx["random"],
            "percentile": nx["percentile_luna"], "nums": R["nums"], "bonus": R["bonus"]},
           open("data/week_summary.json", "w"), ensure_ascii=False, indent=1)
+subprocess.run([sys.executable, "scripts/make_logic_card.py", str(NEXT)], check=True)
 subprocess.run([sys.executable, "scripts/build_history.py"], check=True)
 print(open("data/week_summary.json").read())
