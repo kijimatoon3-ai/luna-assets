@@ -1,6 +1,6 @@
 # ルナ 毎週パイプライン(スケジュール実行用の手順書)
 
-TikTok @ai_loto_luna(Metricool ブランド 6989756)。抽せんは月曜・木曜の18:45。
+TikTok @ai_loto_luna(Metricool ブランド 7390724「ai_loto_luna」、2026-10-13からルナ専用。旧ブランド 6989756 は開花亭BIS専用で、触らない)。抽せんは月曜・木曜の18:45。
 実行は毎週 火曜・金曜 07:07(JST)。
 【2本構成(2026-10-09 ユーザー確認)】1回の実行で動画を2本作る。
  A) 結果発表だけ(オフ・カーディガン・ギャル口調、約45秒): シーン1(冒頭は結果から)→答え合わせカード→締め「次の予想は<月曜|木曜>の抽せん前に出すよ」。今日10:00に予約。
@@ -18,7 +18,7 @@ TikTok @ai_loto_luna(Metricool ブランド 6989756)。抽せんは月曜・木�
 0. リポジトリ kijimatoon3-ai/luna-assets が無ければ add_repo(access=push)→ git clone。作業はリポジトリのルート。
 1. 直前に終わった回 D を決める。data/loto6_all.xlsx の最終行の次、または最新の抽せん日(月・木)。次の回 N = D+1。
    N の抽せん日: D が月曜の回なら木曜、D が木曜の回なら月曜。
-2. 重複チェック: data/picks/<N>.json が既にあり、かつ Metricool(getScheduledPosts, brandId 6989756, Asia/Tokyo)に今日10:00以降の TikTok 予約がある → 終了(何もしない)。
+2. 重複チェック: data/picks/<N>.json が既にあり、かつ Metricool(getScheduledPosts, brandId 7390724, Asia/Tokyo)に今日10:00以降の TikTok 予約がある → 終了(何もしない)。
 3. 結果の取得: WebFetch で次を順に試す(抽せん翌朝は更新済みのはず)。本数字6個とボーナスは**2か所以上で一致**を確認。
    - https://tokaikensyo.com/campaignwinning/loto6/
    - https://www.mk-mode.com/rails/loto/loto6
@@ -51,7 +51,7 @@ TikTok @ai_loto_luna(Metricool ブランド 6989756)。抽せんは月曜・木�
    - 冒頭の一言は毎回同じ言い回しにしない。直近の2本と重ならないようにする。
    全体 60〜80秒に収める。ナレーションは短く、数字は区切って読む(例「に、にじゅういち、…」ではなく「2、21、30、34、35、43」と書く)。
    get_video で completed まで待つ(目安4分、30秒ごと)。失敗したら1回だけ作り直し、それでも失敗なら止めて通知。
-8. Metricool createScheduledPost(blogId 6989756): 今日 10:00 JST、providers tiktok、
+8. Metricool createScheduledPost(blogId 7390724): 今日 10:00 JST、providers tiktok、
    tiktokData {isAigc:true, privacyOption:PUBLIC_TO_EVERYONE, title:"第N回ロト6 ルナの予想と答え合わせ"}、media は video_url。
    キャプション: 【第D回 答え合わせ+第N回 AI予想】の見出し、ルナ/ランダムの一致数、「当たる保証なし・抽せんは毎回独立・エンタメ」、ハッシュタグ(#ロト6 #ロト6予想 #AI予想 #AIロト研究員ルナ #宝くじ)。
    firstCommentText: 「ルナとランダム、どっちが多く当たると思う?コメントで教えて!」
@@ -59,6 +59,6 @@ TikTok @ai_loto_luna(Metricool ブランド 6989756)。抽せんは月曜・木�
 10. 最後に、何を作って何時に予約したか、ルナ vs ランダムの通算を一行でまとめて報告。
 
 ## 補足
-- 月の公開枠(Metricool、他ブランドと共有)は残りが少ない。週2本まで。増やさない(ユーザー決定)。
+- 2026-10-13にルナ専用ブランドに分離し、有料プランに変更済み。週4本(結果発表2+予想2)で運用する。開花亭BISの投稿(旧ブランド 6989756)は一切触らない。
 - ルナの外見: 予想=白ジャケット(オン)、答え合わせ=カーディガン(オフ・ギャル)。固定。
 - 効果測定: 3〜4本たまったら Metricool で時間帯別の再生数・最後まで見られた割合を比べ、投稿時間を調整する(ユーザーと相談)。
