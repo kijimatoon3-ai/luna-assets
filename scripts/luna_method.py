@@ -24,6 +24,7 @@ def fit(idx,lam=5.0):
 # 精度確認(前半で学習→後半で検証)
 cut=int(N*0.8);b_tr=fit(np.arange(100,cut))
 oos=float(stats.pearsonr((X[cut:]-X[100:cut].mean(0))@b_tr,z[cut:])[0])
+_pred=((X[cut:]-X[100:cut].mean(0))@b_tr).tolist();json.dump({"pred":_pred,"actual":z[cut:].tolist(),"corr":oos,"n":len(_pred)},open("oos_scatter.json","w"))
 b=fit(np.arange(100,N))                    # 本番は全データで学習
 # 全 C(43,6) を列挙して、人気度スコアに応じた確率で1組を抽出
 combos=np.array(list(itertools.combinations(range(43),6)),dtype=np.int8)
