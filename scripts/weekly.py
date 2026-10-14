@@ -74,13 +74,17 @@ win = set(R["nums"])
 ct(d, 170, "第%d回 答え合わせ" % D, F("Bold", 52), GREY)
 ct(d, 270, "当せん番号", F("Bold", 40), GREY); row(R["nums"], 340)
 ct(d, 500, "ボーナス %d" % R["bonus"], F("Bold", 40), GREY)
-ct(d, 640, "ルナ(人気薄の逆張り)", F("Bold", 44), OR); row(pk["luna"], 720, win)
-ct(d, 890, "一致 %d個" % hit(pk["luna"]), F("Bold", 64), OR)
-ct(d, 1080, "ランダム(くじ引き)", F("Bold", 44), GREY); row(pk["random"], 1160, win)
-ct(d, 1330, "一致 %d個" % hit(pk["random"]), F("Bold", 64), GREY)
+ct(d, 640, "ルナの6数字", F("Bold", 44), OR); row(pk["luna"], 720, win)
+ct(d, 890, "一致 %d個" % hit(pk["luna"]), F("Bold", 110), OR)
+c1 = R["counts"][0]
+fact = ("1等は %d口 出ました" % c1) if c1 > 0 else "1等は出ず、次回に持ち越し"
+d.rounded_rectangle([60, 1120, W-60, 1300], radius=26, fill=CARD)
+ct(d, 1150, "今回のメモ", F("Medium", 34), GREY); ct(d, 1210, fact, F("Bold", 52), DARK)
+ct(d, 1370, "無作為な6数字の一致は、平均で約0.84個", F("Medium", 36), GREY)
+ct(d, 1450, "ルナの通算(%d回) 一致 %d個" % (n, tl), F("Bold", 44), OR)
+ct(d, 1530, "参考: ランダム(くじ引き) 通算 %d個" % tr, F("Regular", 32), GREY)
 verdict = "ルナの勝ち" if hit(pk["luna"]) > hit(pk["random"]) else ("ランダムの勝ち" if hit(pk["luna"]) < hit(pk["random"]) else "引き分け")
-ct(d, 1470, verdict, F("Bold", 72), DARK)
-ct(d, 1580, "通算(%d回) ルナ %d個 / ランダム %d個" % (n, tl, tr), F("Medium", 38), GREY)
+ct(d, 1650, "※当たる方法ではありません。確率はどの数字も同じ", F("Regular", 28), GREY)
 d.rounded_rectangle([W/2-170, 1820, W/2+170, 1876], radius=28, fill=CARD); ct(d, 1832, "AI×LOTTO LAB", F("Bold", 30), OR)
 im.save(f"cards/answer_{D}.png")
 
@@ -115,6 +119,7 @@ json.dump({"answer_draw": D, "luna_hit": hit(pk["luna"]), "random_hit": hit(pk["
            "total": {"draws": n, "luna": tl, "random": tr}, "next": NEXT, "luna": nx["luna"], "random": nx["random"],
            "percentile": nx["percentile_luna"], "nums": R["nums"], "bonus": R["bonus"]},
           open("data/week_summary.json", "w"), ensure_ascii=False, indent=1)
+subprocess.run([sys.executable, "scripts/make_hook_cards.py", str(NEXT)], check=True)
 subprocess.run([sys.executable, "scripts/make_logic_card.py", str(NEXT)], check=True)
 subprocess.run([sys.executable, "scripts/make_explain_cards.py", str(NEXT)], check=True)
 subprocess.run([sys.executable, "scripts/build_history.py"], check=True)

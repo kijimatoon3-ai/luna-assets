@@ -28,7 +28,7 @@ chk(r is not None, "戦績に第%d回がある" % D)
 if r and pD:
     chk(r["luna"] == pD["luna"] and r["random"] == pD["random"], "戦績の予想数字が、予想時に保存した数字と同じ")
     chk(r["nums"] == nums and r["bonus"] == bonus, "戦績の当せん数字が履歴と同じ")
-for f in (f"cards/answer_{D}.png", f"cards/pred_{N}.png"): chk(os.path.exists(f), f"{f} がある")
+for f in (f"cards/answer_{D}.png", f"cards/pred_{N}.png", f"cards/hook_{N}.png", f"cards/numbers_{N}.png"): chk(os.path.exists(f), f"{f} がある")
 for s in a.script:
     t = open(s).read()
     for label, ns in (("答え合わせ", nums), ("ルナ予想", pN["luna"] if pN else []), ("ランダム予想", pN["random"] if pN else [])):
