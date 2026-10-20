@@ -148,6 +148,116 @@
    5,
    6
   ],
+  "result": {
+   "nums": [
+    15,
+    17,
+    19,
+    34,
+    36,
+    37
+   ],
+   "bonus": 3,
+   "luna_hit": 0,
+   "random_hit": 0,
+   "cum_luna": 0,
+   "cum_random": 2
+  }
+ },
+ {
+  "draw": 2147,
+  "analysis_through": 2146,
+  "oos_corr": 0.6899,
+  "luna": [
+   5,
+   29,
+   32,
+   35,
+   40,
+   43
+  ],
+  "random": [
+   5,
+   9,
+   15,
+   20,
+   37,
+   42
+  ],
+  "percentile_luna": 0.494,
+  "basis_unpopular": [
+   43,
+   40,
+   34,
+   41,
+   35,
+   20,
+   42
+  ],
+  "basis_popular": [
+   11,
+   8,
+   3,
+   7,
+   12,
+   5,
+   6
+  ],
+  "result": {
+   "nums": [
+    9,
+    16,
+    22,
+    23,
+    27,
+    29
+   ],
+   "bonus": 39,
+   "luna_hit": 1,
+   "random_hit": 1,
+   "cum_luna": 1,
+   "cum_random": 3
+  }
+ },
+ {
+  "draw": 2148,
+  "analysis_through": 2147,
+  "oos_corr": 0.6909,
+  "luna": [
+   7,
+   20,
+   24,
+   34,
+   36,
+   40
+  ],
+  "random": [
+   13,
+   22,
+   30,
+   32,
+   34,
+   40
+  ],
+  "percentile_luna": 6.965,
+  "basis_unpopular": [
+   43,
+   40,
+   34,
+   41,
+   35,
+   20,
+   42
+  ],
+  "basis_popular": [
+   11,
+   8,
+   3,
+   7,
+   12,
+   5,
+   6
+  ],
   "result": null
  }
 ]
