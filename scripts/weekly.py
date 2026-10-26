@@ -119,7 +119,7 @@ json.dump({"answer_draw": D, "luna_hit": hit(pk["luna"]), "random_hit": hit(pk["
            "total": {"draws": n, "luna": tl, "random": tr}, "next": NEXT, "luna": nx["luna"], "random": nx["random"],
            "percentile": nx["percentile_luna"], "nums": R["nums"], "bonus": R["bonus"]},
           open("data/week_summary.json", "w"), ensure_ascii=False, indent=1)
-subprocess.run([sys.executable, "scripts/make_hook_cards.py", str(NEXT)], check=True)
+subprocess.run([sys.executable, "scripts/make_hook_cards.py", str(NEXT), "火曜" if "月" in str(a.next_date) else "金曜"], check=True)
 subprocess.run([sys.executable, "scripts/make_logic_card.py", str(NEXT)], check=True)
 subprocess.run([sys.executable, "scripts/make_explain_cards.py", str(NEXT)], check=True)
 subprocess.run([sys.executable, "scripts/build_history.py"], check=True)

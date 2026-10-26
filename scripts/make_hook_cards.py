@@ -35,6 +35,6 @@ d.rounded_rectangle([60, 1260, W-60, 1560], radius=26, fill=(30, 24, 20), outlin
 d.text((100, 1290), "⚠ 当てる方法ではありません", font=F("Bold", 38), fill=(240, 180, 120))
 d.text((100, 1360), "抽せんは毎回独立。当せん確率は、どの6数字でも同じです。", font=F("Regular", 28), fill=WHITE)
 d.text((100, 1410), "エンタメとして、結果を毎回公開して検証します。", font=F("Regular", 28), fill=WHITE)
-ct(d, 1640, "答え合わせは、金曜の朝", F("Bold", 50), GOLD)
+ct(d, 1640, "答え合わせは、%sの朝" % (sys.argv[2] if len(sys.argv) > 2 else "金曜"), F("Bold", 50), GOLD)
 ct(d, 1830, "AI×LOTTO LAB", F("Regular", 26), GR)
 im.save(f"cards/numbers_{N}.png"); print(pct, hit, n)
