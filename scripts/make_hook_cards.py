@@ -25,7 +25,7 @@ ct(d, 1830, "AI×LOTTO LAB", F("Regular", 26), GR)
 im.save(f"cards/hook_{N}.png")
 # 6数字
 im, d = new()
-ct(d, 170, "第%d回 ルナの6数字" % N, F("Bold", 64), WHITE)
+ct(d, 170, "第%d回 ルナの抽出6数字" % N, F("Bold", 64), WHITE)
 ct(d, 262, "全%d回のデータを分析して選びました" % p["draws"], F("Medium", 34), BLUE)
 for i, v in enumerate(p["luna"]):
     r, c = divmod(i, 3); cx = 230+c*310; cy = 560+r*330
