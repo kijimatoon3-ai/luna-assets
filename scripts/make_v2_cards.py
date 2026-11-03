@@ -40,3 +40,11 @@ for k in range(1,7):
     ct(d,1330,"AIが分析した視点から抽出",F("Medium",38),GR)
     ct(d,1410,"当てる方法ではありません",F("Regular",30),GR); foot(d); im.save(f"cards/v2_num{k}_{N}.png")
 print("ok")
+# 3視点を1枚にまとめたカード(場面数を減らすため)
+im,d=new(); ct(d,200,"ルナの3つの視点",F("Bold",72),GOLD); ct(d,320,"過去の全データを分析",F("Medium",42),WHITE)
+items=[("① よく出る数字","6 ・ 37 ・ 2 ・ 42"),("② 一緒に出やすい数字","6 ・ 38 ・ 15 ・ 1"),("③ 次の抽せん球と出やすい数字","F か I ・ 6 ・ 21 ・ 2")]
+y=470
+for lab,val in items:
+    d.rounded_rectangle([70,y,W-70,y+260],radius=26,fill=CB,outline=CBD,width=3)
+    d.text((110,y+35),lab,font=F("Medium",40),fill=GR); d.text((110,y+120),val,font=F("Bold",78),fill=WHITE); y+=310
+ct(d,y+40,"傾向です。当てる方法ではありません",F("Regular",30),GR); foot(d); im.save(f"cards/v2_views_{N}.png")
