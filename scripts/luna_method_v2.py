@@ -1,7 +1,7 @@
 """ルナ・メソッド v2(逆張りなし): 出現回数・直近・相性・翌回・セット球の複合スコアで6数字を確率抽出。
 使い方: python3 scripts/luna_method_v2.py <次回の回号> [--show]   リポジトリのルートから実行。"""
 import sys, json, itertools, collections, numpy as np, openpyxl
-NEXT=int(sys.argv[1]); SHOW="--show" in sys.argv
+NEXT=int(sys.argv[1]); SHOW="--show" in sys.argv; HYP="--hyp" in sys.argv   # --hyp: 仮説H1(前回の形の持ち越し)を加点。検証用
 ws=openpyxl.load_workbook("data/loto6_all.xlsx",read_only=True).active
 R=[r for r in ws.iter_rows(min_row=2,values_only=True) if r[0]]
 N=len(R); S=[set(r[2:8]) for r in R]
@@ -61,12 +61,15 @@ cons=(np.diff(combos.astype(np.int16),axis=1)==1).sum(1)
 carry=np.isin(combos,list(last)).sum(1)
 ok=(odd>=3)&(odd<=4)&(sm>=95)&(sm<=170)&(cons<=1)&(carry>=1)&(carry<=2)
 cs=score[combos[ok]-1].sum(1); BETA=0.5
+if HYP:   # 仮説H1: 前回(第2153回)の形が続く。奇数4・21以下4・連番1組に加点(各0.5)。過去データでは前回の形は次回を予測しない(lag1相関≒0)ので、期待効果なしの検証用。
+    lowc=(combos<=21).sum(1)
+    cs=cs+0.5*((odd[ok]==4).astype(float)+(lowc[ok]==4)+(cons[ok]==1))
 p=np.exp(BETA*(cs-cs.max())); p/=p.sum()
 rng=np.random.default_rng(NEXT)
 pick=sorted(int(x) for x in combos[ok][rng.choice(ok.sum(),p=p)])
 out={"next":NEXT,"draws":N,"luna":pick,"pset":{k:round(v,3) for k,v in pset.items()},
-     "top":[int(i+1) for i in np.argsort(-score)[:10]],"score":{str(i+1):round(float(score[i]),2) for i in range(43)},"beta":BETA,"n_candidates":int(ok.sum())}
-json.dump(out,open(f"data/picks_v2_{NEXT}.json","w"),ensure_ascii=False,indent=1)
+     "top":[int(i+1) for i in np.argsort(-score)[:10]],"score":{str(i+1):round(float(score[i]),2) for i in range(43)},"beta":BETA,"hyp":HYP,"n_candidates":int(ok.sum())}
+json.dump(out,open(f"data/picks_v2{'h' if HYP else ''}_{NEXT}.json","w"),ensure_ascii=False,indent=1)
 if SHOW:
     print("次回セット球の確率:",dict(sorted(out["pset"].items(),key=lambda x:-x[1])))
     print("スコア上位:",out["top"]); print("抽出:",pick,"候補数",out["n_candidates"])
