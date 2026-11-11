@@ -1,7 +1,7 @@
 """ルナ・メソッド v2(逆張りなし): 出現回数・直近・相性・翌回・セット球の複合スコアで6数字を確率抽出。
 使い方: python3 scripts/luna_method_v2.py <次回の回号> [--show]   リポジトリのルートから実行。"""
 import sys, json, itertools, collections, numpy as np, openpyxl
-NEXT=int(sys.argv[1]); SHOW="--show" in sys.argv; HYP="--hyp" in sys.argv; SETD="--setD" in sys.argv   # --hyp: 仮説H1(前回の形の持ち越し)を加点。検証用
+NEXT=int(sys.argv[1]); SHOW="--show" in sys.argv; HYP="--hyp" in sys.argv; SETD="--setD" in sys.argv; FIX=[a.split("=")[1] for a in sys.argv if a.startswith("--setfix=")]   # --hyp: 仮説H1(前回の形の持ち越し)を加点。検証用
 ws=openpyxl.load_workbook("data/loto6_all.xlsx",read_only=True).active
 R=[r for r in ws.iter_rows(min_row=2,values_only=True) if r[0]]
 N=len(R); S=[set(r[2:8]) for r in R]
@@ -46,6 +46,7 @@ for k in sets:
     g=min(N-lu[k],25) if k in lu else 25
     h,n=gaps[g]; cur[k]=(h+1)/(n+10)
 tot=sum(cur.values()); pset={k:v/tot for k,v in cur.items()}
+if FIX: pset={k:(1.0 if k==FIX[0] else 0.0) for k in sets}   # --setfix=D: 次回のセット球をDと仮定して固定
 setlift={}
 for k in sets:
     idx=[t for t in range(ERA,N) if sb[t]==k]
@@ -70,7 +71,7 @@ rng=np.random.default_rng(NEXT)
 pick=sorted(int(x) for x in combos[ok][rng.choice(ok.sum(),p=p)])
 out={"next":NEXT,"draws":N,"luna":pick,"pset":{k:round(v,3) for k,v in pset.items()},
      "top":[int(i+1) for i in np.argsort(-score)[:10]],"score":{str(i+1):round(float(score[i]),2) for i in range(43)},"beta":BETA,"hyp":HYP,"n_candidates":int(ok.sum())}
-json.dump(out,open(f"data/picks_v2{'h' if HYP else ''}{'d' if SETD else ''}_{NEXT}.json","w"),ensure_ascii=False,indent=1)
+json.dump(out,open(f"data/picks_v2{'h' if HYP else ''}{'d' if SETD else ''}{'f'+FIX[0] if FIX else ''}_{NEXT}.json","w"),ensure_ascii=False,indent=1)
 if SHOW:
     print("次回セット球の確率:",dict(sorted(out["pset"].items(),key=lambda x:-x[1])))
     print("スコア上位:",out["top"]); print("抽出:",pick,"候補数",out["n_candidates"])
