@@ -1,7 +1,7 @@
 """ルナ・メソッド v2(逆張りなし): 出現回数・直近・相性・翌回・セット球の複合スコアで6数字を確率抽出。
 使い方: python3 scripts/luna_method_v2.py <次回の回号> [--show]   リポジトリのルートから実行。"""
 import sys, json, itertools, collections, numpy as np, openpyxl
-NEXT=int(sys.argv[1]); SHOW="--show" in sys.argv; HYP="--hyp" in sys.argv   # --hyp: 仮説H1(前回の形の持ち越し)を加点。検証用
+NEXT=int(sys.argv[1]); SHOW="--show" in sys.argv; HYP="--hyp" in sys.argv; SETD="--setD" in sys.argv   # --hyp: 仮説H1(前回の形の持ち越し)を加点。検証用
 ws=openpyxl.load_workbook("data/loto6_all.xlsx",read_only=True).active
 R=[r for r in ws.iter_rows(min_row=2,values_only=True) if r[0]]
 N=len(R); S=[set(r[2:8]) for r in R]
@@ -54,6 +54,7 @@ for k in sets:
 f_set=sum(pset[k]*setlift[k] for k in sets)
 Z=lambda x:(x-x.mean())/x.std()
 score=Z(f_all)+Z(f_rec)+Z(aff)+Z(fol)+Z(f_set)
+if SETD: score=score+Z(setlift['D'])*0.5   # 仮説H2: 次回はDセット球。D回で出やすかった数字に加点(0.5)。D回の偏りは統計的に有意でない(p=0.92)ので検証用
 # 組み合わせ: 形の条件(奇数3-4、合計95-170、連続ペア<=1、前回と同じ数字1-2個)で絞り、スコアに比例する確率で抽出
 combos=np.array(list(itertools.combinations(range(1,44),6)),dtype=np.int8)
 odd=(combos%2).sum(1); sm=combos.sum(1,dtype=np.int32)
@@ -69,7 +70,7 @@ rng=np.random.default_rng(NEXT)
 pick=sorted(int(x) for x in combos[ok][rng.choice(ok.sum(),p=p)])
 out={"next":NEXT,"draws":N,"luna":pick,"pset":{k:round(v,3) for k,v in pset.items()},
      "top":[int(i+1) for i in np.argsort(-score)[:10]],"score":{str(i+1):round(float(score[i]),2) for i in range(43)},"beta":BETA,"hyp":HYP,"n_candidates":int(ok.sum())}
-json.dump(out,open(f"data/picks_v2{'h' if HYP else ''}_{NEXT}.json","w"),ensure_ascii=False,indent=1)
+json.dump(out,open(f"data/picks_v2{'h' if HYP else ''}{'d' if SETD else ''}_{NEXT}.json","w"),ensure_ascii=False,indent=1)
 if SHOW:
     print("次回セット球の確率:",dict(sorted(out["pset"].items(),key=lambda x:-x[1])))
     print("スコア上位:",out["top"]); print("抽出:",pick,"候補数",out["n_candidates"])
