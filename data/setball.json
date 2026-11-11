@@ -1,5 +1,5 @@
 {
- "source": "tatuo.net/set/data.php (2149 corrected to J via lotonum); 1851-1900 excluded (null) due to errors; 2152=F (tatuo.net single source)",
+ "source": "tatuo.net/set/data.php (2149 corrected to J via lotonum); 1851-1900 excluded (null) due to errors; 2152=F (tatuo.net single source); 2153=I (tatuo.net single source, positional reading of row \"第2151回～第2153回: H F I\"; unconfirmed elsewhere)",
  "sets": {
   "1": "A",
   "2": "G",
@@ -2152,6 +2152,7 @@
   "2149": "J",
   "2150": "E",
   "2151": "H",
-  "2152": "F"
+  "2152": "F",
+  "2153": "I"
  }
 }
