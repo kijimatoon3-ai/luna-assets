@@ -4,6 +4,8 @@ from PIL import Image, ImageDraw, ImageFont
 N = int(sys.argv[1]); p = json.load(open(f"data/picks/{N}.json"))
 rows = [x for x in openpyxl.load_workbook("data/loto6_all.xlsx", read_only=True).active.iter_rows(values_only=True)][1:]
 n = len(rows); hit = sum(1 for x in rows if x[9] > 0); pct = round(hit/n*100)
+CARRY = len(sys.argv) > 3 and sys.argv[3] == "carry"   # 冒頭フック: 1等が出ず持ち越した回の割合
+if CARRY: hit = n - hit; pct = round(hit/n*100)
 W, H = 1080, 1920; FD = "/usr/share/fonts/opentype/noto/NotoSansCJK-{}.ttc"; F = lambda w, s: ImageFont.truetype(FD.format(w), s)
 BG = (10, 14, 30); GOLD = (240, 190, 90); WHITE = (245, 247, 252); GR = (150, 158, 180); BLUE = (90, 160, 230); CB = (26, 32, 58)
 def new():
@@ -13,10 +15,10 @@ def ct(d, y, t, fn, fill):
 # フック
 im, d = new()
 ct(d, 200, "第1回〜第%d回のデータ" % p["draws"], F("Medium", 40), GR)
-ct(d, 330, "1等が出た回", F("Bold", 72), WHITE)
+ct(d, 330, "1等が出ず持ち越した回" if CARRY else "1等が出た回", F("Bold", 72), WHITE)
 ct(d, 470, "%d%%" % pct, F("Bold", 300), GOLD)
 ct(d, 860, "%s回中 %s回" % (format(n, ","), format(hit, ",")), F("Bold", 56), WHITE)
-ct(d, 960, "日本のだれかが当てている", F("Medium", 44), BLUE)
+ct(d, 960, "だれも当てなかった回" if CARRY else "日本のだれかが当てている", F("Medium", 44), BLUE)
 d.rounded_rectangle([60, 1160, W-60, 1560], radius=30, fill=CB, outline=(60, 70, 110), width=3)
 ct(d, 1210, "でも、自分が1等を当てる確率は", F("Bold", 42), WHITE)
 ct(d, 1310, "1 / 6,096,454", F("Bold", 96), (255, 150, 130))
