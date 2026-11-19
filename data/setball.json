@@ -1,5 +1,5 @@
 {
- "source": "tatuo.net/set/data.php (2149 corrected to J via lotonum); 1851-1900 excluded (null) due to errors; 2152=F (tatuo.net single source); 2153=I (tatuo.net single source, positional reading of row \"第2151回～第2153回: H F I\"; unconfirmed elsewhere)",
+ "source": "tatuo.net/set/data.php (2149 corrected to J via lotonum); 1851-1900 excluded (null) due to errors; 2152=F (tatuo.net single source); 2153=I (tatuo.net single source, positional reading of row \"第2151回～第2153回: H F I\"; unconfirmed elsewhere); 2152=F,2153=I confirmed, 2154=D, 2155=J (takarakuji-loto.jp single source, 2026-11-19)",
  "sets": {
   "1": "A",
   "2": "G",
@@ -2153,6 +2153,8 @@
   "2150": "E",
   "2151": "H",
   "2152": "F",
-  "2153": "I"
+  "2153": "I",
+  "2154": "D",
+  "2155": "J"
  }
 }
