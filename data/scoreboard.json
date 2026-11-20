@@ -272,6 +272,38 @@
     10904,
     175952
    ]
+  },
+  {
+   "draw": 2156,
+   "luna": [
+    1,
+    6,
+    24,
+    30,
+    36,
+    38
+   ],
+   "random": [],
+   "luna_hit": 1,
+   "random_hit": null,
+   "luna_bonus": false,
+   "random_bonus": false,
+   "nums": [
+    1,
+    5,
+    23,
+    26,
+    35,
+    42
+   ],
+   "bonus": 8,
+   "counts": [
+    1,
+    6,
+    173,
+    9570,
+    151416
+   ]
   }
  ]
 }
