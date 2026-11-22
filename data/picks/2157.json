@@ -1,0 +1,14 @@
+{
+ "next": 2157,
+ "draws": 2156,
+ "luna": [
+  27,
+  30,
+  32,
+  37,
+  38,
+  43
+ ],
+ "random": [],
+ "method": "v3 7viewpoints equal weight, top6 for 3/6"
+}
