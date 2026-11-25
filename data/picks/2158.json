@@ -1,0 +1,14 @@
+{
+ "next": 2158,
+ "draws": 2157,
+ "luna": [
+  15,
+  18,
+  24,
+  32,
+  39,
+  40
+ ],
+ "random": [],
+ "method": "v3 seven viewpoints equal weight, softmax T=1"
+}
